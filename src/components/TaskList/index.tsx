@@ -1,5 +1,5 @@
 import { FaTrash } from "react-icons/fa";
-import { TiDelete, TiInputChecked, TiEdit } from "react-icons/ti";
+import { TiDelete, TiInputChecked, TiEdit, TiArrowSync } from "react-icons/ti";
 import { ToastContainer, toast } from "react-toastify";
 
 import taskStore from "../../stores/taskStore";
@@ -40,6 +40,13 @@ class TaskList extends BaseComponent {
     }
   };
 
+  checkIsUploaded(task: any) {
+    const { dirtyAt } = task;
+    return (
+      dirtyAt && new Date(dirtyAt) <= new Date(taskStore.dataMeta.tsUpload)
+    );
+  }
+
   componentDidMount() {
     this.unsubTasks = taskStore.subscribe(this.rerender);
   }
@@ -57,15 +64,27 @@ class TaskList extends BaseComponent {
             taskStore.data.map((item: any) => (
               <div className="flex w-96" key={item._id}>
                 <div className="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
-                  <div
-                    className="flex align-end justify-end"
-                    role="button"
-                    onClick={() => this.handleEdit(item)}
-                  >
-                    <span className="text-xs text-gray-400 align-middle">
-                      Edit{" "}
-                    </span>
-                    <TiEdit className="text-s text-gray-400" />
+                  <div className="flex align-end justify-between">
+                    <div className="flex w-36">
+                      <span className="text-xs text-gray-400 align-middle">
+                        {!this.checkIsUploaded(item) && "Not"} Synced
+                      </span>
+                      <TiArrowSync
+                        className={`text-s text-${
+                          this.checkIsUploaded(item) ? "green" : "red"
+                        }-400`}
+                      />
+                    </div>
+                    <div
+                      className="flex w-14"
+                      role="button"
+                      onClick={() => this.handleEdit(item)}
+                    >
+                      <span className="text-xs text-gray-400 align-middle">
+                        Edit{" "}
+                      </span>
+                      <TiEdit className="text-s text-gray-400" />
+                    </div>
                   </div>
                   <p className="text-sm">Task title: {item.text}</p>
                   <p
