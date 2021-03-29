@@ -1,3 +1,5 @@
+import React from "react";
+
 interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
@@ -5,9 +7,17 @@ interface Props {
   type?: string;
   name?: string;
   id?: string;
+  placeholder?: string;
 }
 
-export default function Input({ id, onChange, value, type, className }: Props) {
+export default function Input({
+  id,
+  onChange,
+  value,
+  type,
+  className,
+  placeholder,
+}: Props) {
   return (
     <input
       id={id}
@@ -15,6 +25,7 @@ export default function Input({ id, onChange, value, type, className }: Props) {
       value={value}
       type={type}
       className={className}
+      placeholder={placeholder}
     />
   );
 }
